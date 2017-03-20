@@ -22,7 +22,7 @@ logstash_config name do
     input_file_name: '/var/log/syslog',
     input_file_type: 'syslog'
   )
-  notifies :restart, "logstash_service[#{name}]"
+  notifies node['logstash']['restart_action'], "logstash_service[#{name}]"
   action [:create]
 end
 

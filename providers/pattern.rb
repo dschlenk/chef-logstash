@@ -33,7 +33,7 @@ action :create do
       group       pattern[:group]
       mode        pattern[:mode]
       variables   pattern[:variables]
-      notifies    :restart, "logstash_service[#{pattern[:instance]}]"
+      notifies    node['logstash']['restart_action'], "logstash_service[#{pattern[:instance]}]"
       action      :create
     end
     new_resource.updated_by_last_action(tp.updated_by_last_action?)
