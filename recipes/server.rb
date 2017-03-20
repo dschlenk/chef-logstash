@@ -24,7 +24,7 @@ end
 
 logstash_config name do
   action [:create]
-  notifies :restart, "logstash_service[#{name}]"
+  notifies node['logstash']['restart_action'], "logstash_service[#{name}]"
 end
 
 logstash_plugins 'contrib' do

@@ -98,3 +98,7 @@ default['logstash']['instance_default']['curator_timestring'] = '\%Y.\%m.\%d'
 
 # Make sure instance key exists
 default['logstash']['instance']
+
+# default action to take to restart logstash due to config changes
+# use :reload to force logstash to be killed if it doesn't stop cleanly
+default['logstash']['restart_action'] = :restart
