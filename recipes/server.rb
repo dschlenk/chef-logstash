@@ -22,9 +22,11 @@ logstash_service name do
   action [:enable]
 end
 
+actn = :restart
+actn = :reload if node['logstash']['restart_action'] == 'reload'
 logstash_config name do
   action [:create]
-  notifies node['logstash']['restart_action'], "logstash_service[#{name}]"
+  notifies actn, "logstash_service[#{name}]"
 end
 
 logstash_plugins 'contrib' do

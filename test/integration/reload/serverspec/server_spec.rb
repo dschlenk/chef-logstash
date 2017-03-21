@@ -29,8 +29,6 @@ describe file('/opt/logstash/server/etc/conf.d/output_stdout') do
   it { should be_file }
 end
 
-# give elasticsearch some time to come up
-
 sleep(10)
 describe port(9300) do
   it { should be_listening }

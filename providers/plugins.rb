@@ -37,6 +37,8 @@ action :create do
   ls_instance_dir = @instance_dir
   ls_install_check = @install_check
 
+  actn = :restart
+  actn = :reload if node['logstash']['restart_action'] == 'reload'
   case @install_type
   when 'native'
     ex = execute "bin/plugin install #{ls_name}" do
@@ -44,7 +46,7 @@ action :create do
       user    ls_user
       group   ls_group
       cwd     ls_instance_dir
-      notifies node['logstash']['restart_action'], "logstash_service[#{ls_instance}]"
+      notifies actn, "logstash_service[#{ls_instance}]"
       # this is a temp workaround to make the plugin command idempotent.
       not_if { ::File.exist?("#{ls_instance_dir}/#{ls_install_check}") }
     end
@@ -61,7 +63,7 @@ action :create do
       version   ls_version
       path      ls_basedir
       action    [:put]
-      notifies  node['logstash']['restart_action'], "logstash_service[#{ls_instance}]"
+      notifies  actn, "logstash_service[#{ls_instance}]"
       # this is a temp workaround to ensure idempotent.
       not_if { ::File.exist?("#{ls_instance_dir}/#{ls_install_check}") }
     end

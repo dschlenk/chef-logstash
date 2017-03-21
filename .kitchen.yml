@@ -45,3 +45,28 @@ suites:
               default: 'patterns/custom_patterns.erb'
             elasticsearch_ip: '127.0.0.1'
             enable_embedded_es: true
+  - name: reload
+    run_list:
+      - recipe[apt::default]
+      - recipe[java::default]
+      - recipe[logstash::server]
+    attributes:
+      java:
+        install_flavor: "oracle"
+        jdk_version: "7"
+        oracle:
+          accept_oracle_download_terms: true
+      logstash:
+        restart_action: 'reload'
+        instance:
+          server:
+            xms: '256M'
+            xmx: '256M'
+            config_templates:
+              input_syslog: 'config/input_syslog.conf.erb'
+              output_stdout: 'config/output_stdout.conf.erb'
+              output_elasticsearch: 'config/output_elasticsearch.conf.erb'
+            pattern_templates:
+              default: 'patterns/custom_patterns.erb'
+            elasticsearch_ip: '127.0.0.1'
+            enable_embedded_es: true
