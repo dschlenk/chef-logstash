@@ -17,12 +17,14 @@ logstash_service name do
   action [:enable]
 end
 
+actn = :restart
+actn = :reload if node['logstash']['restart_action'] == 'reload'
 logstash_config name do
   variables(
     input_file_name: '/var/log/syslog',
     input_file_type: 'syslog'
   )
-  notifies node['logstash']['restart_action'], "logstash_service[#{name}]"
+  notifies actn, "logstash_service[#{name}]"
   action [:create]
 end
 

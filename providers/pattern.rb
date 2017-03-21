@@ -24,6 +24,8 @@ end
 
 action :create do
   pattern = pattern_vars
+  actn = :restart
+  actn = :reload if node['logstash']['restart_action'] == 'reload'
   # Chef::Log.info("config vars: #{pattern.inspect}")
   pattern[:templates].each do |_template, file|
     tp = template "#{pattern[:path]}/#{::File.basename(file).chomp(::File.extname(file))}" do
@@ -33,7 +35,7 @@ action :create do
       group       pattern[:group]
       mode        pattern[:mode]
       variables   pattern[:variables]
-      notifies    node['logstash']['restart_action'], "logstash_service[#{pattern[:instance]}]"
+      notifies    actn, "logstash_service[#{pattern[:instance]}]"
       action      :create
     end
     new_resource.updated_by_last_action(tp.updated_by_last_action?)
